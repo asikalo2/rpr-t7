@@ -9,6 +9,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+
 public class Grad {
 
     private SimpleStringProperty naziv;
@@ -27,6 +32,53 @@ public class Grad {
         naziv = new SimpleStringProperty("");
         brojStanovnika = new SimpleIntegerProperty(0);
         temperature = new SimpleListProperty<Double>();
+    }
+
+    public static ArrayList<Grad> ucitajGradove(){
+        ArrayList<Grad> gradovi = new ArrayList<>();
+        Scanner ulaz;
+        String novinaziv = "";
+        Scanner inputStream = null;
+        int vel = 0;
+
+        // Konstruisanje ulaznog toka za datoteku brojevi.txt
+        try {
+            ulaz = new Scanner(new FileReader("mjerenja.txt"));
+        } catch(FileNotFoundException e) {
+            System.out.println("Datoteka mjerenja.txt ne postoji ili se ne može otvoriti.");
+            System.out.println("Greška: " + e);
+            return null; // kraj programa
+        }
+
+        try {
+            // Učitavamo brojeve
+            while (ulaz.hasNext()) {
+              /*  String line = inputStream.nextLine();
+                if (line.startsWith(Grad.getNaziv())) {
+                    novinaziv = inputStream.next();
+                } else {
+                    System.out.println("error");
+                }
+                inputStream.nextLine();*/
+
+
+
+
+              //  gradovi[vel] = new Grad();
+              //  gradovi[vel].setNaziv(novinaziv);
+            //    gradovi[vel].setTemperature();
+              //  gradovi.add(ulaz.nextLine());
+            }
+
+        } catch(Exception e) {
+            System.out.println("Problem pri čitanju/pisanju podataka.");
+            System.out.println("Greška: " + e);
+
+        } finally {
+            // Bez obzira došlo do izuzetka ili ne, datoteke treba zatvoriti
+            ulaz.close();
+        }
+        return gradovi;
     }
 
     public String getNaziv() {
