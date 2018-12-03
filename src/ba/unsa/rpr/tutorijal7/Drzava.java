@@ -17,6 +17,22 @@ public class Drzava {
     private SimpleStringProperty jedinica_za_povrsinu;
     Grad glavni_grad;
 
+    public Drzava(String a, int n, double i, String b, Grad g) {
+        naziv = new SimpleStringProperty(a);
+        broj_stanovnika = new SimpleIntegerProperty(n);
+        povrsina = new SimpleDoubleProperty(i);
+        jedinica_za_povrsinu = new SimpleStringProperty(b);
+        glavni_grad = g;
+    }
+
+    public Drzava() {
+        naziv = new SimpleStringProperty("");
+        broj_stanovnika = new SimpleIntegerProperty(0);
+        povrsina = new SimpleDoubleProperty(0);
+        jedinica_za_povrsinu = new SimpleStringProperty("");
+        glavni_grad = null;
+    }
+
 
     public int getBroj_stanovnika() {
         return broj_stanovnika.get();
