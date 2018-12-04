@@ -14,63 +14,58 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Grad {
+public class Grad implements Serializable {
 
     private SimpleStringProperty naziv;
     private SimpleIntegerProperty brojStanovnika;
-    private SimpleListProperty<Double> temperature = new SimpleListProperty<Double>();
+    private ArrayList<Double> temperature = new ArrayList<Double>();
 
-    public Grad(String a, Integer n, Double[] g) {
+    public Grad(String a, Integer n, ArrayList<Double> g) {
         naziv = new SimpleStringProperty(a);
         brojStanovnika = new SimpleIntegerProperty(n);
-        temperature = new SimpleListProperty<Double>();
-        ObservableList<Double> temp = FXCollections.observableArrayList(g);
-        temperature.set(temp);
+        temperature = g;
     }
 
     public Grad() {
         naziv = new SimpleStringProperty("");
         brojStanovnika = new SimpleIntegerProperty(0);
-        temperature = new SimpleListProperty<Double>();
+        temperature = new ArrayList<Double>();
     }
 
-    public static ArrayList<Grad> ucitajGradove(){
-        ArrayList<Grad> gradovi = new ArrayList<>();
+    public static ArrayList<Grad> ucitajGradove() {
+        ArrayList<Grad> gradovi = new ArrayList<Grad>();
         Scanner ulaz;
         String novinaziv = "";
-        Scanner inputStream = null;
         int vel = 0;
 
         // Konstruisanje ulaznog toka za datoteku brojevi.txt
         try {
-            ulaz = new Scanner(new FileReader("mjerenja.txt"));
-        } catch(FileNotFoundException e) {
+            ulaz = new Scanner(new FileReader(Grad.class.getResource("mjerenja.txt").getFile()));
+        } catch (FileNotFoundException e) {
             System.out.println("Datoteka mjerenja.txt ne postoji ili se ne može otvoriti.");
             System.out.println("Greška: " + e);
             return null; // kraj programa
         }
-
         try {
             // Učitavamo brojeve
-            while (ulaz.hasNext()) {
-              /*  String line = inputStream.nextLine();
-                if (line.startsWith(Grad.getNaziv())) {
-                    novinaziv = inputStream.next();
-                } else {
-                    System.out.println("error");
+            while (ulaz.hasNextLine()) {
+                ArrayList<Double> temp = new ArrayList<Double>();
+                String red = ulaz.nextLine();
+                String[] elementi = red.split(",");
+                String naziv = elementi[0];
+                int duzina = elementi.length <= 1000 ? elementi.length : 1000;
+                for (int i = 1; i < duzina; i++) {
+                    temp.add(Double.parseDouble(elementi[i]));
                 }
-                inputStream.nextLine();*/
 
-
-
-
-              //  gradovi[vel] = new Grad();
-              //  gradovi[vel].setNaziv(novinaziv);
-            //    gradovi[vel].setTemperature();
-              //  gradovi.add(ulaz.nextLine());
+                Grad g = new Grad();
+                g.setNaziv(naziv);
+                g.setTemperature(temp);
+                gradovi.add(g);
             }
 
-        } catch(Exception e) {
+        } catch (
+                Exception e) {
             System.out.println("Problem pri čitanju/pisanju podataka.");
             System.out.println("Greška: " + e);
 
@@ -79,6 +74,13 @@ public class Grad {
             ulaz.close();
         }
         return gradovi;
+    }
+
+    public String toString() {
+        String result = "";
+        result += this.getNaziv() + ",";
+        result += Arrays.toString(this.getTemperature().toArray()).replaceAll("\\[|\\]|\\s","");
+        return result;
     }
 
     public String getNaziv() {
@@ -105,11 +107,11 @@ public class Grad {
         this.brojStanovnika.set(brojStanovnika);
     }
 
-    public SimpleListProperty<Double> getTemperature() {
+    public ArrayList<Double> getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(SimpleListProperty<Double> temperature) {
+    public void setTemperature(ArrayList<Double> temperature) {
         this.temperature = temperature;
     }
 
